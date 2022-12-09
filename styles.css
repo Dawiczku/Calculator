@@ -5,6 +5,7 @@
     --large-btn-clr: #4adb84;
     --small-btn-clr: #c3c3c3;
     --calc-background: #7f7f7f;
+    --calc-border: #000;
 }
 
 *,
@@ -18,4 +19,34 @@
 body {
     height: 100vh;
     overflow: hidden;
+}
+
+.container,
+.btn,
+.display {
+    border: 3px solid var(--calc-border);
+    border-radius: 5px;
+}
+
+.container {
+    width: 400px;
+    background-color: var(--calc-background);
+    padding: 20px;
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1em;
+}
+
+.small-btn {
+    background-color: var(--small-btn-clr);
+    aspect-ratio: 1/1;
+}
+
+.large-btn {
+    background-color: var(--large-btn-clr);
+    aspect-ratio: 2/1;
+    grid-column: span 2;
 }
