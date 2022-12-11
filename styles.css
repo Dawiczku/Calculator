@@ -28,10 +28,14 @@ body {
     border-radius: 5px;
 }
 
+.container,
+.display {
+    padding: 1em;
+}
+
 .container {
     width: 400px;
     background-color: var(--calc-background);
-    padding: 20px;
 }
 
 .buttons {
@@ -49,4 +53,25 @@ body {
     background-color: var(--large-btn-clr);
     aspect-ratio: 2/1;
     grid-column: span 2;
+}
+
+.display {
+    background-color: var(--screen-clr);
+    margin-bottom: 1em;
+}
+
+.current-calc,
+.last-calc {
+    padding: 0.5em;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+}
+
+.current-calc {
+    height: 4em;
+}
+
+.last-calc {
+    height: 3em;
 }
