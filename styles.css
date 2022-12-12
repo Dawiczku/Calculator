@@ -25,6 +25,12 @@ body {
     position: relative;
 }
 
+main {
+    height: 100vh;
+    display: grid;
+    place-items: center;
+}
+
 footer {
     background-color: var(--white-clr);
     text-align: center;
