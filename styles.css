@@ -82,6 +82,22 @@ button {
     grid-column: span 2;
 }
 
+.small-btn:hover {
+    background-color: var(--small-btn-hover);
+}
+
+.large-btn:hover {
+    background-color: var(--large-btn-hover);
+}
+
+.btn:hover{
+    cursor: grab;
+}
+
+.btn:active {
+    scale: 0.95;
+}
+
 .display {
     background-color: var(--screen-clr);
     margin-bottom: 1em;
