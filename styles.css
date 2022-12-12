@@ -6,6 +6,8 @@
     --large-btn-clr: #4adb84;
     --small-btn-clr: #c3c3c3;
     --calc-background: #7f7f7f;
+    --small-btn-hover: #a8a6a6;
+    --large-btn-hover: #4adb84b0;
     --calc-border: #000;
     --white-clr: #fff;
 }
@@ -50,17 +52,13 @@ button {
 .btn,
 .display {
     border: 3px solid var(--calc-border);
-    border-radius: 5px;
-}
-
-.container,
-.display {
-    padding: 1em;
+    border-radius: 10px;
 }
 
 .container {
-    width: 400px;
+    width: 450px;
     background-color: var(--calc-background);
+    padding: 2em;
 }
 
 .buttons {
@@ -87,18 +85,26 @@ button {
 .display {
     background-color: var(--screen-clr);
     margin-bottom: 1em;
+    padding: 1.5em;
 }
 
 .current-calc,
 .last-calc {
     display: flex;
-    align-items: flex-end;
     justify-content: flex-end;
 }
 
 .current-calc {
+    align-items: flex-end;
+}
+
+.last-calc {
+    align-items: flex-start;
+}
+
+.current-calc {
     height: 64px;
-    font-size: 40px;
+    font-size: 48px;
 }
 
 .last-calc {
