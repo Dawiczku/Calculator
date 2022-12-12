@@ -7,6 +7,7 @@
     --small-btn-clr: #c3c3c3;
     --calc-background: #7f7f7f;
     --calc-border: #000;
+    --white-clr: #fff;
 }
 
 *,
@@ -18,8 +19,20 @@
 }
 
 body {
+    background-color: var(--background);
     height: 100vh;
     overflow: hidden;
+    position: relative;
+}
+
+footer {
+    background-color: var(--white-clr);
+    text-align: center;
+    position: absolute;
+    padding: 10px;
+    bottom: 0;
+    left: 0;
+    right: 0;
 }
 
 body,
