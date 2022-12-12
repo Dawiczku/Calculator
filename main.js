@@ -19,20 +19,34 @@ function division(number1, number2) {
 function operate(number1, operator, number2) {
     switch(operator) {
         case '+': 
-            result = addition(number1, number2);
+            operationResult = addition(number1, number2);
             break;
         case '-':
-            result = substraction(number1, number2);
+            operationResult = substraction(number1, number2);
             break;
         case '*':
-            result = multiplication(number1, number2);
+            operationResult = multiplication(number1, number2);
             break;
         case '/':
-            result = multiplication(number1, number2);
+            operationResult = multiplication(number1, number2);
             break;
     }
 }
 
 // Variables
 
-let result = null;
+let operationResult = null;
+let currentStringValue = "";
+
+// DOM elements and methods
+
+let numberButtons = Array.from(document.getElementsByClassName("number"));
+
+// Main section
+
+numberButtons.sort((a, b) => a.value - b.value);
+for(let i = 0; i < numberButtons.length; i++) {
+    numberButtons[i].addEventListener("click", function() {
+        currentStringValue += numberButtons[i].value;
+    }); 
+}
