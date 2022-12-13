@@ -38,7 +38,7 @@ function operate(number1, operator, number2) {
 // Variables
 
 let operationResult = null;
-let currentOperation = "";
+let currentOperation = null;
 let currentStringValue = "";
 
 // DOM elements and methods
@@ -54,7 +54,11 @@ numberButtons.sort((a, b) => a.value - b.value);
 // Adding a click listener for every number button.
 for(let number of numberButtons) {
     number.addEventListener("click", () => {
-        currentStringValue += number.value;
+        if(Number(number.value) === 0 && currentStringValue == ""){
+            return;
+        } else {
+            currentStringValue += number.value;
+        }
 
         // Checking if the number is not too large, if so setting maximum value.
         if(Number(currentStringValue) < 999999999) {
