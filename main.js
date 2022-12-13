@@ -38,21 +38,23 @@ function operate(number1, operator, number2) {
 // Variables
 
 let operationResult = null;
+let currentOperation = "";
 let currentStringValue = "";
 
 // DOM elements and methods
 
-let numberButtons = Array.from(document.getElementsByClassName("number"));
+const numberButtons = Array.from(document.getElementsByClassName("number"));
+const operationButtons = Array.from(document.getElementsByClassName("operation"));
 let currentValueDisplay = document.getElementById("current-calc");
 
-// Main section
+// ----- Main section -----
 
 numberButtons.sort((a, b) => a.value - b.value);
 
 // Adding a click listener for every number button.
-for(let i = 0; i < numberButtons.length; i++) {
-    numberButtons[i].addEventListener("click", function() {
-        currentStringValue += numberButtons[i].value;
+for(let number of numberButtons) {
+    number.addEventListener("click", () => {
+        currentStringValue += number.value;
 
         // Checking if the number is not too large, if so setting maximum value.
         if(Number(currentStringValue) < 999999999) {
@@ -61,4 +63,10 @@ for(let i = 0; i < numberButtons.length; i++) {
             currentStringValue = currentValueDisplay.textContent = "999999999";
         }
     }); 
+}
+
+for(let operation of operationButtons) {
+    operation.addEventListener("click", () => {
+        currentOperation = operation.value;
+    })
 }
