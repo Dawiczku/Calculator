@@ -43,12 +43,22 @@ let currentStringValue = "";
 // DOM elements and methods
 
 let numberButtons = Array.from(document.getElementsByClassName("number"));
+let currentValueDisplay = document.getElementById("current-calc");
 
 // Main section
 
 numberButtons.sort((a, b) => a.value - b.value);
+
+// Adding a click listener for every number button.
 for(let i = 0; i < numberButtons.length; i++) {
     numberButtons[i].addEventListener("click", function() {
         currentStringValue += numberButtons[i].value;
+
+        // Checking if the number is not too large, if so setting maximum value.
+        if(Number(currentStringValue) < 999999999) {
+            currentValueDisplay.textContent = currentStringValue;
+        } else {
+            currentStringValue = currentValueDisplay.textContent = "999999999";
+        }
     }); 
 }
