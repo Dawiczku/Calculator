@@ -13,7 +13,9 @@ function multiplication(number1, number2) {
 }
 
 function division(number1, number2) {
-    number2 !== 0 ? number1 / number2 : 'Error';
+    let number;
+    number2 !== 0 ? number = number1 / number2 : number = 'Error';
+    return number;
 }
 
 function operate(number1, operator, number2) {
