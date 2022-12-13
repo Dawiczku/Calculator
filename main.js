@@ -54,6 +54,8 @@ numberButtons.sort((a, b) => a.value - b.value);
 // Adding a click listener for every number button.
 for(let number of numberButtons) {
     number.addEventListener("click", () => {
+
+        // Make sure, zero would not overlap
         if(Number(number.value) === 0 && currentStringValue == ""){
             return;
         } else {
@@ -61,10 +63,10 @@ for(let number of numberButtons) {
         }
 
         // Checking if the number is not too large, if so setting maximum value.
-        if(Number(currentStringValue) < 999999999) {
+        if(currentStringValue.length < 9) {
             currentValueDisplay.textContent = currentStringValue;
         } else {
-            currentStringValue = currentValueDisplay.textContent = "999999999";
+            return;
         }
     }); 
 }
