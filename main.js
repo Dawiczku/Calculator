@@ -35,11 +35,16 @@ function operate(number1, operator, number2) {
     }
 }
 
+function updateMainDisplay(value) {
+    currentValueDisplay.textContent = value;
+}
+
 // Variables
 
 let operationResult = null;
 let currentOperation = null;
 let currentStringValue = "";
+let firstNumber = null;
 
 // DOM elements and methods
 
@@ -63,8 +68,8 @@ for(let number of numberButtons) {
         }
 
         // Checking if the number is not too large, if so setting maximum value.
-        if(currentStringValue.length < 9) {
-            currentValueDisplay.textContent = currentStringValue;
+        if(currentStringValue.length < 10) {
+            updateMainDisplay(currentStringValue);
         } else {
             return;
         }
