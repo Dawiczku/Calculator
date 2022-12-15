@@ -41,6 +41,10 @@ function operate(number1, operator, number2) {
 }
 
 function updateMainDisplay(value) {
+    if(value == "") {
+        currentValueDisplay.textContent = "";
+        return;
+    }
     value = Number(value);
     if(isInt(value)) {
         if(isTooLong(value)) {
@@ -58,6 +62,10 @@ function updateMainDisplay(value) {
 }
 
 function updateSmallDisplay(value, operation) {
+    if(value == "") {
+        lastValueDisplay.textContent = "-";
+        return;
+    }
     value = Number(value);
     if(isInt(value)) {
         if(isTooLong(value)) {
@@ -191,3 +199,13 @@ for(let operation of operationButtons) {
         }
     })
 }
+
+clearButton.addEventListener("click", () => {
+    updateMainDisplay("0");
+    updateSmallDisplay("", "");
+    currentOperation = null;
+    firstStringValue = "";
+    secondStringValue = "";
+    firstValue = null;
+    secondValue = null;
+})
