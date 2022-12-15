@@ -40,19 +40,68 @@ function operate(number1, operator, number2) {
 }
 
 function updateMainDisplay(value) {
-    if(Number.isInteger(Number(value))) {
-        currentValueDisplay.textContent = value;
+    value = Number(value);
+    if(isInt(value)) {
+        if(isTooLong(value)) {
+            currentValueDisplay.textContent = `${value.toExponential(2)}`;
+        } else {
+            currentValueDisplay.textContent = `${value}`;
+        }
     } else {
-        currentValueDisplay.textContent = Number(value).toFixed(2).toString();
+        if(isTooLong(value)) {
+            currentValueDisplay.textContent = `${value.toExponential(2).toFixed(2)}`;
+        } else {
+            currentValueDisplay.textContent = `${value.toExponential(2)}`;
+        }
     }
 }
 
 function updateSmallDisplay(value, operation) {
-    if(Number.isInteger(Number(value))) {
-        lastValueDisplay.textContent = `${value} ${operation}`;
+    value = Number(value);
+    if(isInt(value)) {
+        if(isTooLong(value)) {
+            lastValueDisplay.textContent = `${value.toExponential(2)} ${operation}`;
+        } else {
+            lastValueDisplay.textContent = `${value} ${operation}`;
+        }
     } else {
-        lastValueDisplay.textContent = `${Number(value).toFixed(2).toString()} ${operation}`;
+        if(isTooLong(value)) {
+            lastValueDisplay.textContent = `${value.toExponential(2).toFixed(2)} ${operation}`;
+        } else {
+            lastValueDisplay.textContent = `${value.toExponential(2)} ${operation}`;
+        }
     }
+}
+
+function equalSignDisplayUpdate(value1, operation, value2) {
+    value1 = Number(value1);
+    value2 = Number(value2);
+
+    
+    
+}
+
+function isInt(value) {
+    return Number.isInteger(value) ? true : false;
+}
+
+function isTooLong(value) {
+    return value.toString().length >= 10 ? true : false;
+}
+
+function convertProperly(value) {
+    if(isInt(value)) {
+        if(isTooLong(value)) {
+            value = value.toExponential(2);
+        } 
+    } else {
+        if(isTooLong(value)) {
+            value = value.toFixed(2).toExponential(2);
+        } else {
+            value = value.toFixed(2);
+        }
+    }
+    return value;
 }
 
 // Variables
@@ -90,11 +139,11 @@ for(let number of numberButtons) {
         }
 
         // If number is not too large and second parameter is not present, update main screen with first Value
-        if(firstStringValue.length < 10 && secondStringValue == "") {
+        if(!isTooLong(firstStringValue) && secondStringValue == "") {
             updateMainDisplay(firstStringValue);
         
         // Else if number is not too large and second parameter is present, update main screen with second Value
-        } else if(secondStringValue.length < 10 && secondStringValue != "") {
+        } else if(!isTooLong(secondStringValue) && secondStringValue != "") {
             updateMainDisplay(secondStringValue);
         
         // Else the number is too large, return.
@@ -127,11 +176,10 @@ for(let operation of operationButtons) {
 
             if(operation.value == '=') {
 
-                if(!Number.isInteger(firstValue)) {
-                    firstValue = firstValue.toFixed(2);
-                }
-
+                firstValue = convertProperly(firstValue);
+                secondValue = convertProperly(secondValue);
                 lastValueDisplay.textContent = `${firstValue} ${currentOperation} ${secondValue} =`;
+
                 updateMainDisplay(operationResult);
                 currentOperation = null;
 
