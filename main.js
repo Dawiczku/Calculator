@@ -13,9 +13,7 @@ function multiplication(number1, number2) {
 }
 
 function division(number1, number2) {
-    let number;
-    number2 !== 0 ? number = number1 / number2 : number = 'Error';
-    return number;
+    return number2 !== 0 ? number1 / number2 : 'Error';
 }
 
 // Makes operations based on passed arguments
@@ -48,10 +46,10 @@ function updateMainDisplay(value) {
             currentValueDisplay.textContent = `${value}`;
         }
     } else {
-        if(isTooLong(value)) {
-            currentValueDisplay.textContent = `${value.toExponential(2).toFixed(2)}`;
+        if(isTooLong(parseInt(value))) {
+            currentValueDisplay.textContent = `${Number(value.toExponential(2)).toFixed(2)}`;
         } else {
-            currentValueDisplay.textContent = `${value.toExponential(2)}`;
+            currentValueDisplay.textContent = `${value.toFixed(2)}`;
         }
     }
 }
@@ -65,10 +63,10 @@ function updateSmallDisplay(value, operation) {
             lastValueDisplay.textContent = `${value} ${operation}`;
         }
     } else {
-        if(isTooLong(value)) {
-            lastValueDisplay.textContent = `${value.toExponential(2).toFixed(2)} ${operation}`;
+        if(isTooLong(parseInt(value))) {
+            lastValueDisplay.textContent = `${Number(value.toExponential(2)).toFixed(2)} ${operation}`;
         } else {
-            lastValueDisplay.textContent = `${value.toExponential(2)} ${operation}`;
+            lastValueDisplay.textContent = `${value.toFixed(2)} ${operation}`;
         }
     }
 }
@@ -87,8 +85,8 @@ function convertProperly(value) {
             value = value.toExponential(2);
         } 
     } else {
-        if(isTooLong(value)) {
-            value = value.toFixed(2).toExponential(2);
+        if(isTooLong(parseInt(value))) {
+            value = Number(value.toExponential(2)).toFixed(2);
         } else {
             value = value.toFixed(2);
         }
@@ -163,15 +161,15 @@ for(let operation of operationButtons) {
            again, two previous values get calculated, the operation sign gets signed
            to the result of previous operation */
         } else if (secondStringValue != "") {
-            firstValue = Number(firstStringValue);
-            secondValue = Number(secondStringValue);
+
+            firstValue = convertProperly(Number(firstStringValue));
+            secondValue = convertProperly(Number(secondStringValue));
+
             let operationResult = operate(firstValue, currentOperation, secondValue);
             updateMainDisplay("");
 
             if(operation.value == '=') {
 
-                firstValue = convertProperly(firstValue);
-                secondValue = convertProperly(secondValue);
                 lastValueDisplay.textContent = `${firstValue} ${currentOperation} ${secondValue} =`;
 
                 updateMainDisplay(operationResult);
