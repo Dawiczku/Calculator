@@ -73,14 +73,6 @@ function updateSmallDisplay(value, operation) {
     }
 }
 
-function equalSignDisplayUpdate(value1, operation, value2) {
-    value1 = Number(value1);
-    value2 = Number(value2);
-
-    
-    
-}
-
 function isInt(value) {
     return Number.isInteger(value) ? true : false;
 }
@@ -116,8 +108,10 @@ let secondValue = null;
 
 const numberButtons = Array.from(document.getElementsByClassName("number"));
 const operationButtons = Array.from(document.getElementsByClassName("operation"));
-let currentValueDisplay = document.getElementById("current-calc");
-let lastValueDisplay = document.getElementById("last-calc");
+const currentValueDisplay = document.getElementById("current-calc");
+const lastValueDisplay = document.getElementById("last-calc");
+const clearButton = document.getElementById("clear-btn");
+const deleteButton = document.getElementById("delete-btn");
 
 // ----- Main section -----
 
