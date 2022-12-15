@@ -20,10 +20,13 @@ function division(number1, number2) {
 function operate(number1, operator, number2) {
 
     let result = null;
+    number1 = Number(number1);
+    number2 = Number(number2);
 
     switch(operator) {
         case '+': 
             result = addition(number1, number2);
+            console.log(result);
             return result;
         case '-':
             result = substraction(number1, number2);
@@ -47,7 +50,7 @@ function updateMainDisplay(value) {
         }
     } else {
         if(isTooLong(parseInt(value))) {
-            currentValueDisplay.textContent = `${Number(value.toExponential(2)).toFixed(2)}`;
+            currentValueDisplay.textContent = `${Number(value.toFixed(2)).toExponential(2)}`;
         } else {
             currentValueDisplay.textContent = `${value.toFixed(2)}`;
         }
@@ -64,7 +67,7 @@ function updateSmallDisplay(value, operation) {
         }
     } else {
         if(isTooLong(parseInt(value))) {
-            lastValueDisplay.textContent = `${Number(value.toExponential(2)).toFixed(2)} ${operation}`;
+            lastValueDisplay.textContent = `${Number(value.toFixed(2)).toExponential(2)} ${operation}`;
         } else {
             lastValueDisplay.textContent = `${value.toFixed(2)} ${operation}`;
         }
@@ -79,6 +82,7 @@ function isTooLong(value) {
     return value.toString().length >= 10 ? true : false;
 }
 
+// Function used when neither of values are empty and user clicks "=" button.
 function convertProperly(value) {
     if(isInt(value)) {
         if(isTooLong(value)) {
@@ -86,9 +90,9 @@ function convertProperly(value) {
         } 
     } else {
         if(isTooLong(parseInt(value))) {
-            value = Number(value.toExponential(2)).toFixed(2);
+            value = Number(value.toFixed(2)).toExponential(2);
         } else {
-            value = value.toFixed(2);
+            value = Number(value.toFixed(2));
         }
     }
     return value;
