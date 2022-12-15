@@ -18,6 +18,7 @@ function division(number1, number2) {
     return number;
 }
 
+// Makes operations based on passed arguments
 function operate(number1, operator, number2) {
 
     let result = null;
@@ -88,40 +89,57 @@ for(let number of numberButtons) {
             firstStringValue += number.value;
         }
 
-        // Checking if the number is not too large, if so setting maximum value.
+        // If number is not too large and second parameter is not present, update main screen with first Value
         if(firstStringValue.length < 10 && secondStringValue == "") {
             updateMainDisplay(firstStringValue);
+        
+        // Else if number is not too large and second parameter is present, update main screen with second Value
         } else if(secondStringValue.length < 10 && secondStringValue != "") {
             updateMainDisplay(secondStringValue);
+        
+        // Else the number is too large, return.
         } else {
             return;
         }
     }); 
 }
 
+// Add EventListener to every operation button
 for(let operation of operationButtons) {
     operation.addEventListener("click", () => {
-        // If second value is not present, you can change the operation sign
-        if(secondStringValue == "") {   
+
+        /* If second value is not present, you can change every operation sign
+           excluding equal sign to avoid null display error. */
+        if(secondStringValue == "" && operation.value != "=") {
             currentOperation = operation.value;
             firstValue = Number(firstStringValue);
             updateSmallDisplay(firstValue, currentOperation);
             updateMainDisplay("");
+
         /* Else if the second value is present and user clicks operation button 
-           again, two previous values get calculated*/
-        } else {
+           again, two previous values get calculated, the operation sign gets signed
+           to the result of previous operation */
+        } else if (secondStringValue != "") {
             firstValue = Number(firstStringValue);
             secondValue = Number(secondStringValue);
             let operationResult = operate(firstValue, currentOperation, secondValue);
             updateMainDisplay("");
+
             if(operation.value == '=') {
+
+                if(!Number.isInteger(firstValue)) {
+                    firstValue = firstValue.toFixed(2);
+                }
+
                 lastValueDisplay.textContent = `${firstValue} ${currentOperation} ${secondValue} =`;
                 updateMainDisplay(operationResult);
                 currentOperation = null;
+
             } else {
                 currentOperation = operation.value;
                 updateSmallDisplay(operationResult, currentOperation);
             }
+
             firstStringValue = operationResult;
             secondStringValue = "";
             firstValue = null;
