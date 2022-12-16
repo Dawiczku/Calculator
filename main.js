@@ -125,6 +125,7 @@ const currentValueDisplay = document.getElementById("current-calc");
 const lastValueDisplay = document.getElementById("last-calc");
 const clearButton = document.getElementById("clear-btn");
 const deleteButton = document.getElementById("delete-btn");
+const commaButton = document.getElementById("comma");
 
 // --- Main section ---
 
@@ -221,8 +222,6 @@ clearButton.addEventListener("click", () => {
     secondValue = null;
 })
 
-// Naprawic dzialania z pierwsza liczba == 0
 // Dodac funkcjonalnosc do kropki
 // Dodac funkcjonalnosc do przycisku delete
-// Ogarnac dzialania z minusem jako pierwszy input
 // Sprobowac poprawic kod
