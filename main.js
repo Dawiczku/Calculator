@@ -1,4 +1,4 @@
-// Functions
+// --- Functions ---
 
 function addition(number1, number2) {
     return number1 + number2;
@@ -46,6 +46,8 @@ function updateMainDisplay(value) {
         return;
     }
     value = Number(value);
+    
+    // Formatting the display based on it's value
     if(isInt(value)) {
         if(isTooLong(value)) {
             currentValueDisplay.textContent = `${value.toExponential(2)}`;
@@ -67,6 +69,8 @@ function updateSmallDisplay(value, operation) {
         return;
     }
     value = Number(value);
+
+    // Formatting the display based on it's value
     if(isInt(value)) {
         if(isTooLong(value)) {
             lastValueDisplay.textContent = `${value.toExponential(2)} ${operation}`;
@@ -106,7 +110,7 @@ function convertProperly(value) {
     return value;
 }
 
-// Variables
+// --- Variables ---
 
 let currentOperation = null;
 let firstStringValue = "";
@@ -114,7 +118,7 @@ let secondStringValue = "";
 let firstValue = null;
 let secondValue = null;
 
-// DOM elements and methods
+// --- DOM elements and methods ---
 
 const numberButtons = Array.from(document.getElementsByClassName("number"));
 const operationButtons = Array.from(document.getElementsByClassName("operation"));
@@ -123,7 +127,7 @@ const lastValueDisplay = document.getElementById("last-calc");
 const clearButton = document.getElementById("clear-btn");
 const deleteButton = document.getElementById("delete-btn");
 
-// ----- Main section -----
+// --- Main section ---
 
 numberButtons.sort((a, b) => a.value - b.value);
 
@@ -135,11 +139,13 @@ for(let number of numberButtons) {
         if(Number(number.value) === 0 && firstStringValue == ""){
             return;
         // Writing value to second string if first one is not empty and operation is choosed
-        } else if(firstStringValue != "" && currentOperation != null) {
+        } else if(firstStringValue != "" && currentOperation != null && !isTooLong(secondStringValue)) {
             secondStringValue += number.value;
         
         } else {
-            firstStringValue += number.value;
+            if(!isTooLong(firstStringValue)){ 
+                firstStringValue += number.value;
+            }
         }
 
         // If number is not too large and second parameter is not present, update main screen with first Value
@@ -180,6 +186,8 @@ for(let operation of operationButtons) {
             let operationResult = operate(firstValue, currentOperation, secondValue);
             updateMainDisplay("");
 
+            /* If the operation value is equal to "=", it doesn't get signed to result,
+               so it won't be defaultly used in the next operation */
             if(operation.value == '=') {
 
                 lastValueDisplay.textContent = `${firstValue} ${currentOperation} ${secondValue} =`;
@@ -192,6 +200,7 @@ for(let operation of operationButtons) {
                 updateSmallDisplay(operationResult, currentOperation);
             }
 
+            // Resetting the values, setting the result as firstValue
             firstStringValue = operationResult;
             secondStringValue = "";
             firstValue = null;
@@ -200,6 +209,7 @@ for(let operation of operationButtons) {
     })
 }
 
+// Clear button event listener to reset everything
 clearButton.addEventListener("click", () => {
     updateMainDisplay("0");
     updateSmallDisplay("", "");
@@ -209,3 +219,10 @@ clearButton.addEventListener("click", () => {
     firstValue = null;
     secondValue = null;
 })
+
+// Dodac komentarze
+// Naprawic dzialania z pierwsza liczba == 0
+// Dodac funkcjonalnosc do kropki
+// Dodac funkcjonalnosc do przycisku delete
+// Ogarnac dzialania z minusem jako pierwszy input
+// Sprobowac poprawic kod
