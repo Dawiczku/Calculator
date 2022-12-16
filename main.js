@@ -26,7 +26,6 @@ function operate(number1, operator, number2) {
     switch(operator) {
         case '+': 
             result = addition(number1, number2);
-            console.log(result);
             return result;
         case '-':
             result = substraction(number1, number2);
@@ -41,7 +40,7 @@ function operate(number1, operator, number2) {
 }
 
 function updateMainDisplay(value) {
-    if(value == "") {
+    if(value === "") {
         currentValueDisplay.textContent = "";
         return;
     }
@@ -64,7 +63,7 @@ function updateMainDisplay(value) {
 }
 
 function updateSmallDisplay(value, operation) {
-    if(value == "") {
+    if(value === "") {
         lastValueDisplay.textContent = "-";
         return;
     }
@@ -169,9 +168,11 @@ for(let operation of operationButtons) {
 
         /* If second value is not present, you can change every operation sign
            excluding equal sign to avoid null display error. */
-        if(secondStringValue == "" && operation.value != "=") {
-            currentOperation = operation.value;
+        if(secondStringValue == "" && operation.value !== "=") {
+            
+            firstStringValue == "" ? firstStringValue = "0" : firstStringValue = firstStringValue;
             firstValue = Number(firstStringValue);
+            currentOperation = operation.value;
             updateSmallDisplay(firstValue, currentOperation);
             updateMainDisplay("");
 
@@ -188,7 +189,7 @@ for(let operation of operationButtons) {
 
             /* If the operation value is equal to "=", it doesn't get signed to result,
                so it won't be defaultly used in the next operation */
-            if(operation.value == '=') {
+            if(operation.value === '=') {
 
                 lastValueDisplay.textContent = `${firstValue} ${currentOperation} ${secondValue} =`;
 
@@ -220,7 +221,6 @@ clearButton.addEventListener("click", () => {
     secondValue = null;
 })
 
-// Dodac komentarze
 // Naprawic dzialania z pierwsza liczba == 0
 // Dodac funkcjonalnosc do kropki
 // Dodac funkcjonalnosc do przycisku delete
