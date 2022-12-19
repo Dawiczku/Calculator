@@ -59,20 +59,20 @@ function updateMainDisplay(value) {
     }
 
     // If the last digit is 0, we need to keep it a String, so the 0 shows on the screen
-    if(value.toString().charAt(value.length - 1) !== "0") {
+    if(value.toString().charAt(value.length - 1) !== "0" || isInt(Number(value))) {
         value = Number(value);
     }
     
     // Formatting the display based on it's value
     if(isInt(value)) {
         if(isTooLong(value)) {
-            currentValueDisplay.textContent = `${value.toExponential(2)}`;
+            currentValueDisplay.textContent = `${value.toExponential(3)}`;
         } else {
             currentValueDisplay.textContent = `${value}`;
         }
     } else {
         if(isTooLong(value)) {
-            currentValueDisplay.textContent = `${value.toFixed(2)}`;
+            currentValueDisplay.textContent = `${value.toFixed(3)}`;
         } else {
             currentValueDisplay.textContent = `${value}`;
         }
@@ -89,13 +89,13 @@ function updateSmallDisplay(value, operation) {
     // Formatting the display based on it's value
     if(isInt(value)) {
         if(isTooLong(value)) {
-            lastValueDisplay.textContent = `${value.toExponential(2)} ${operation}`;
+            lastValueDisplay.textContent = `${value.toExponential(3)} ${operation}`;
         } else {
             lastValueDisplay.textContent = `${value} ${operation}`;
         }
     } else {
         if(isTooLong(value)) {
-            lastValueDisplay.textContent = `${value.toFixed(2)} ${operation}`;
+            lastValueDisplay.textContent = `${value.toFixed(3)} ${operation}`;
         } else {
             lastValueDisplay.textContent = `${value} ${operation}`;
         }
@@ -107,16 +107,16 @@ function isInt(value) {
 }
 
 function isTooLong(value) {
-    return value.toString().length >= 10 ? true : false;
+    return value.toString().length >= 8 ? true : false;
 }
 
 // Function used when neither of values are empty and user clicks "=" button.
 function convertProperly(value) {
 
     if(isInt(value)) {
-        return isTooLong(value) ? value.toExponential(2) : value;
+        return isTooLong(value) ? value.toExponential(3) : value;
     } else {
-        return isTooLong(value) ? value.toFixed(2) : value;
+        return isTooLong(value) ? value.toFixed(3) : value;
     }
 }
 
@@ -235,6 +235,5 @@ commaButton.addEventListener("click", () => {
     }
 })
 
-// handle dividing by 0
 // Dodac funkcjonalnosc do przycisku delete
 // Sprobowac poprawic kod
