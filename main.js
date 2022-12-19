@@ -170,7 +170,7 @@ for(let operation of operationButtons) {
             firstValue = Number(firstStringValue);
             currentOperation = operation.value;
             updateSmallDisplay(firstValue, currentOperation);
-            updateMainDisplay("");
+            updateMainDisplay("0");
 
         /* Else if the second value is present and user clicks operation button 
            again, two previous values get calculated, the operation sign gets signed
