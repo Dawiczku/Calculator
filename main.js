@@ -44,6 +44,7 @@ function updateMainDisplay(value) {
         currentValueDisplay.textContent = "";
         return;
     }
+    // Adding a zero before comma if decimal
     if(Number(value) === 0) {
         if(value.toString().includes(".")) {
             currentValueDisplay.textContent = "0" + value;
@@ -104,10 +105,11 @@ function isTooLong(value) {
 
 // Function used when neither of values are empty and user clicks "=" button.
 function convertProperly(value) {
+
     if(isInt(value)) {
-        return isTooLong(value) ? Number(value.toExponential(2)) : Number(value);
+        return isTooLong(value) ? value.toExponential(2) : value;
     } else {
-        return isTooLong(value) ? Number(value.toFixed(2)) : Number(value);
+        return isTooLong(value) ? value.toFixed(2) : value;
     }
 }
 
@@ -176,9 +178,9 @@ for(let operation of operationButtons) {
            again, two previous values get calculated, the operation sign gets signed
            to the result of previous operation */
         } else if (secondStringValue != "") {
-
-            firstValue = convertProperly(Number(firstStringValue));
-            secondValue = convertProperly(Number(secondStringValue));
+            
+            firstValue = Number(firstStringValue);
+            secondValue = Number(secondStringValue);
 
             let operationResult = operate(firstValue, currentOperation, secondValue);
             updateMainDisplay("");
@@ -187,7 +189,7 @@ for(let operation of operationButtons) {
                so it won't be defaultly used in the next operation */
             if(operation.value === '=') {
 
-                lastValueDisplay.textContent = `${firstValue} ${currentOperation} ${secondValue} =`;
+                lastValueDisplay.textContent = `${convertProperly(firstValue)} ${currentOperation} ${convertProperly(secondValue)} =`;
                 updateMainDisplay(operationResult);
                 currentOperation = null;
 
@@ -226,5 +228,6 @@ commaButton.addEventListener("click", () => {
     }
 })
 
+// overlaping zeros
 // Dodac funkcjonalnosc do przycisku delete
 // Sprobowac poprawic kod
