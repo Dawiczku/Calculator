@@ -13,7 +13,12 @@ function multiplication(number1, number2) {
 }
 
 function division(number1, number2) {
-    return number2 != 0 ? number1 / number2 : 'Error';
+    if(number2 === 0) {
+        alert("ERROR");
+        return 0;
+    } else {
+        return number1 / number2;
+    }
 }
 
 // Makes operations based on passed arguments
