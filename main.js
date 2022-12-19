@@ -207,6 +207,16 @@ clearButton.addEventListener("click", () => {
     secondValue = null;
 })
 
+commaButton.addEventListener("click", () => {
+    if(currentOperation == null && !firstStringValue.includes(".")) {
+        firstStringValue += ".";
+        currentValueDisplay.textContent += ".";
+    } else if(currentOperation != null && !secondStringValue.includes(".")){
+        secondStringValue += ".";
+        currentValueDisplay.textContent += ".";
+    }
+})
+
 // Dodac funkcjonalnosc do kropki
 // Dodac funkcjonalnosc do przycisku delete
 // Sprobowac poprawic kod
