@@ -54,10 +54,10 @@ function updateMainDisplay(value) {
             currentValueDisplay.textContent = `${value}`;
         }
     } else {
-        if(isTooLong(parseInt(value))) {
-            currentValueDisplay.textContent = `${Number(value.toFixed(2)).toExponential(2)}`;
-        } else {
+        if(isTooLong(value)) {
             currentValueDisplay.textContent = `${value.toFixed(2)}`;
+        } else {
+            currentValueDisplay.textContent = `${value}`;
         }
     }
 }
@@ -77,10 +77,10 @@ function updateSmallDisplay(value, operation) {
             lastValueDisplay.textContent = `${value} ${operation}`;
         }
     } else {
-        if(isTooLong(parseInt(value))) {
-            lastValueDisplay.textContent = `${Number(value.toFixed(2)).toExponential(2)} ${operation}`;
-        } else {
+        if(isTooLong(value)) {
             lastValueDisplay.textContent = `${value.toFixed(2)} ${operation}`;
+        } else {
+            lastValueDisplay.textContent = `${value} ${operation}`;
         }
     }
 }
@@ -96,18 +96,12 @@ function isTooLong(value) {
 // Function used when neither of values are empty and user clicks "=" button.
 function convertProperly(value) {
     if(isInt(value)) {
-        if(isTooLong(value)) {
-            value = value.toExponential(2);
-        } 
+        return isTooLong(value) ? Number(value.toExponential(2)) : Number(value);
     } else {
-        if(isTooLong(parseInt(value))) {
-            value = Number(value.toFixed(2)).toExponential(2);
-        } else {
-            value = Number(value.toFixed(2));
-        }
+        return isTooLong(value) ? Number(value.toFixed(2)) : Number(value);
     }
-    return value;
 }
+
 
 // --- Variables ---
 
@@ -139,26 +133,18 @@ for(let number of numberButtons) {
         if(Number(number.value) === 0 && firstStringValue == ""){
             return;
         // Writing value to second string if first one is not empty and operation is choosed
-        } else if(firstStringValue != "" && currentOperation != null && !isTooLong(secondStringValue)) {
-            secondStringValue += number.value;
-        
-        } else {
-            if(!isTooLong(firstStringValue)){ 
-                firstStringValue += number.value;
-            }
+        } else if(firstStringValue != "" && currentOperation != null) {
+            secondStringValue += number.value;       
+        } else { 
+            firstStringValue += number.value;
         }
-
-        // If number is not too large and second parameter is not present, update main screen with first Value
-        if(!isTooLong(firstStringValue) && secondStringValue == "") {
+        // If is not present, update main screen with first Value
+        if(secondStringValue == "") {
             updateMainDisplay(firstStringValue);
         
-        // Else if number is not too large and second parameter is present, update main screen with second Value
-        } else if(!isTooLong(secondStringValue) && secondStringValue != "") {
+        // If second parameter is present, update main screen with second Value
+        } else if(secondStringValue != "") {
             updateMainDisplay(secondStringValue);
-        
-        // Else the number is too large, return.
-        } else {
-            return;
         }
     }); 
 }
@@ -193,7 +179,6 @@ for(let operation of operationButtons) {
             if(operation.value === '=') {
 
                 lastValueDisplay.textContent = `${firstValue} ${currentOperation} ${secondValue} =`;
-
                 updateMainDisplay(operationResult);
                 currentOperation = null;
 
