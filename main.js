@@ -44,6 +44,15 @@ function updateMainDisplay(value) {
         currentValueDisplay.textContent = "";
         return;
     }
+    if(Number(value) === 0) {
+        if(value.toString().includes(".")) {
+            currentValueDisplay.textContent = "0" + value;
+        } else {
+            currentValueDisplay.textContent = value;
+        }
+        return;
+    }
+
     value = Number(value);
     
     // Formatting the display based on it's value
@@ -217,6 +226,5 @@ commaButton.addEventListener("click", () => {
     }
 })
 
-// Dodac funkcjonalnosc do kropki
 // Dodac funkcjonalnosc do przycisku delete
 // Sprobowac poprawic kod
