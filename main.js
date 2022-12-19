@@ -13,7 +13,7 @@ function multiplication(number1, number2) {
 }
 
 function division(number1, number2) {
-    return number2 !== 0 ? number1 / number2 : 'Error';
+    return number2 != 0 ? number1 / number2 : 'Error';
 }
 
 // Makes operations based on passed arguments
@@ -46,15 +46,17 @@ function updateMainDisplay(value) {
     }
     // Adding a zero before comma if decimal
     if(Number(value) === 0) {
-        if(value.toString().includes(".")) {
-            currentValueDisplay.textContent = "0" + value;
-        } else {
-            currentValueDisplay.textContent = value;
+        if(isTooLong(value)) {
+            return;
         }
+        currentValueDisplay.textContent = value;
         return;
     }
 
-    value = Number(value);
+    // If the last digit is 0, we need to keep it a String, so the 0 shows on the screen
+    if(value.toString().charAt(value.length - 1) !== "0") {
+        value = Number(value);
+    }
     
     // Formatting the display based on it's value
     if(isInt(value)) {
@@ -117,7 +119,7 @@ function convertProperly(value) {
 // --- Variables ---
 
 let currentOperation = null;
-let firstStringValue = "";
+let firstStringValue = "0";
 let secondStringValue = "";
 let firstValue = null;
 let secondValue = null;
@@ -141,11 +143,12 @@ for(let number of numberButtons) {
     number.addEventListener("click", () => {
 
         // Make sure, zero would not overlap
-        if(Number(number.value) === 0 && firstStringValue == ""){
+        if(Number(number.value) === 0 && (firstStringValue == "0" || isTooLong(firstStringValue))){
             return;
         // Writing value to second string if first one is not empty and operation is choosed
-        } else if(firstStringValue != "" && currentOperation != null) {
-            secondStringValue += number.value;       
+        } else if(firstStringValue != "0" && currentOperation != null) {
+            secondStringValue += number.value;  
+
         } else { 
             firstStringValue += number.value;
         }
@@ -168,11 +171,10 @@ for(let operation of operationButtons) {
            excluding equal sign to avoid null display error. */
         if(secondStringValue == "" && operation.value !== "=") {
             
-            firstStringValue == "" ? firstStringValue = "0" : firstStringValue = firstStringValue;
             firstValue = Number(firstStringValue);
             currentOperation = operation.value;
             updateSmallDisplay(firstValue, currentOperation);
-            updateMainDisplay("0");
+            updateMainDisplay("");
 
         /* Else if the second value is present and user clicks operation button 
            again, two previous values get calculated, the operation sign gets signed
@@ -199,7 +201,7 @@ for(let operation of operationButtons) {
             }
 
             // Resetting the values, setting the result as firstValue
-            firstStringValue = operationResult;
+            firstStringValue = operationResult.toString();
             secondStringValue = "";
             firstValue = null;
             secondValue = null;
@@ -212,7 +214,7 @@ clearButton.addEventListener("click", () => {
     updateMainDisplay("0");
     updateSmallDisplay("", "");
     currentOperation = null;
-    firstStringValue = "";
+    firstStringValue = "0";
     secondStringValue = "";
     firstValue = null;
     secondValue = null;
@@ -228,6 +230,6 @@ commaButton.addEventListener("click", () => {
     }
 })
 
-// overlaping zeros
+// handle dividing by 0
 // Dodac funkcjonalnosc do przycisku delete
 // Sprobowac poprawic kod
