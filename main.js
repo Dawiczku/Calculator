@@ -64,21 +64,20 @@ function isTooLong(value) {
 
 // Function formatting the values based on input.
 function convertProperly(value) {
+    console.log(value);
     if(value === "") {
         return "-";
     } else if (value === "0") {
         return "0";
+    } else if(String(value).charAt(0) === ".") {
+        return "0" + value;
     } else if (Number(value) === 0) {
         return isTooLong(value) ? 0 : value;
     } else if (value === " ") {
         return "";
     } else if(String(value).charAt(String(value).length - 1) === ".") {
         return value;
-    }
-
-    if(String(value).charAt(0) === ".") {
-        return "0" + value;
-    }
+    } 
 
     if(isInt(value)) {
         value = Number(value);
@@ -106,6 +105,7 @@ let firstStringValue = "";
 let secondStringValue = "";
 let firstValue = null;
 let secondValue = null;
+let ableToDelete = null; // Deciding if user can delete digits from the screen
 
 // --- DOM elements and methods ---
 
@@ -146,6 +146,7 @@ for(let number of numberButtons) {
         } else if(secondStringValue != "") {
             updateMainDisplay(secondStringValue);
         }
+        ableToDelete = true;
     }); 
 }
 
@@ -160,7 +161,8 @@ for(let operation of operationButtons) {
             firstStringValue === "." ? firstValue = 0 : firstValue = Number(firstStringValue);
             currentOperation = operation.value;
             updateSmallDisplay(firstValue, currentOperation);
-            updateMainDisplay(" ");
+            updateMainDisplay("0");
+            ableToDelete = false;
 
         /* Else if the second value is present and user clicks operation button 
            again, two previous values get calculated, the operation sign gets signed
@@ -184,6 +186,7 @@ for(let operation of operationButtons) {
             } else {
                 currentOperation = operation.value;
                 updateSmallDisplay(operationResult, currentOperation);
+                ableToDelete = false;
             }
 
             // Resetting the values, setting the result as firstValue
@@ -217,13 +220,27 @@ commaButton.addEventListener("click", () => {
 })
 
 deleteButton.addEventListener("click", () => {
-    if(secondStringValue !== "") {
-        secondStringValue = secondStringValue.slice(0, secondStringValue.length - 1);
-        secondStringValue === "" ? updateMainDisplay("0") : updateMainDisplay(secondStringValue);
-    } else {
-        firstStringValue = firstStringValue.slice(0, firstStringValue.length - 1);
-        firstStringValue === "" ? updateMainDisplay("0") : updateMainDisplay(firstStringValue);
+    
+    if(ableToDelete) {
+        if(secondStringValue !== "") {
+            secondStringValue = secondStringValue.slice(0, secondStringValue.length - 1);
+            if(secondStringValue === "") {
+                updateMainDisplay("0");
+                ableToDelete = false;
+            } else {
+                updateMainDisplay(secondStringValue);
+            }
+        } else {
+            firstStringValue = firstStringValue.slice(0, firstStringValue.length - 1);
+            if(firstStringValue === "") {
+                updateMainDisplay("0");
+                ableToDelete = false;
+            } else {
+                updateMainDisplay(firstStringValue);
+            }
+        }
     }
+    
 })
 
 // Sprobowac poprawic kod
