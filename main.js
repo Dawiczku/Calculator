@@ -62,7 +62,7 @@ function isTooLong(value) {
     return value.toString().length >= 10 ? true : false;
 }
 
-// Function used when neither of values are empty and user clicks "=" button.
+// Function formatting the values based on input.
 function convertProperly(value) {
     if(value === "") {
         return "-";
@@ -72,7 +72,7 @@ function convertProperly(value) {
         return isTooLong(value) ? 0 : value;
     } else if (value === " ") {
         return "";
-    }
+    } 
 
     if(String(value).charAt(0) === ".") {
         return "0" + value;
@@ -152,10 +152,10 @@ for(let operation of operationButtons) {
     operation.addEventListener("click", () => {
 
         /* If second value is not present, you can change every operation sign
-           excluding equal sign to avoid null display error. */
+           excluding equal sign. */
         if(secondStringValue === "" && operation.value !== "=") {
             
-            firstValue = Number(firstStringValue);
+            firstStringValue === "." ? firstValue = 0 : firstValue = Number(firstStringValue);
             currentOperation = operation.value;
             updateSmallDisplay(firstValue, currentOperation);
             updateMainDisplay(" ");
@@ -165,8 +165,8 @@ for(let operation of operationButtons) {
            to the result of previous operation */
         } else if (secondStringValue !== "") {
             
-            firstValue = Number(firstStringValue);
-            secondValue = Number(secondStringValue);
+            firstStringValue === "." ? firstValue = 0 : firstValue = Number(firstStringValue);
+            secondStringValue === "." ? secondValue = 0 : secondValue = Number(secondStringValue);
 
             let operationResult = operate(firstValue, currentOperation, secondValue);
             updateMainDisplay(" ");
