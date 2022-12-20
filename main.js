@@ -72,7 +72,9 @@ function convertProperly(value) {
         return isTooLong(value) ? 0 : value;
     } else if (value === " ") {
         return "";
-    } 
+    } else if(String(value).charAt(String(value).length - 1) === ".") {
+        return value;
+    }
 
     if(String(value).charAt(0) === ".") {
         return "0" + value;
@@ -214,5 +216,14 @@ commaButton.addEventListener("click", () => {
     }
 })
 
-// Dodac funkcjonalnosc do przycisku delete
+deleteButton.addEventListener("click", () => {
+    if(secondStringValue !== "") {
+        secondStringValue = secondStringValue.slice(0, secondStringValue.length - 1);
+        secondStringValue === "" ? updateMainDisplay("0") : updateMainDisplay(secondStringValue);
+    } else {
+        firstStringValue = firstStringValue.slice(0, firstStringValue.length - 1);
+        firstStringValue === "" ? updateMainDisplay("0") : updateMainDisplay(firstStringValue);
+    }
+})
+
 // Sprobowac poprawic kod
