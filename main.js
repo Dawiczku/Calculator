@@ -45,86 +45,62 @@ function operate(number1, operator, number2) {
 }
 
 function updateMainDisplay(value) {
-    if(value === "") {
-        currentValueDisplay.textContent = "";
-        return;
-    }
-    // Adding a zero before comma if decimal
-    if(Number(value) === 0) {
-        if(isTooLong(value)) {
-            return;
-        }
-        currentValueDisplay.textContent = value;
-        return;
-    }
-
-    // If the last digit is 0, we need to keep it a String, so the 0 shows on the screen
-    if(value.toString().charAt(value.length - 1) !== "0" || isInt(Number(value))) {
-        value = Number(value);
-    }
-    
-    // Formatting the display based on it's value
-    if(isInt(value)) {
-        if(isTooLong(value)) {
-            currentValueDisplay.textContent = `${value.toExponential(3)}`;
-        } else {
-            currentValueDisplay.textContent = `${value}`;
-        }
-    } else {
-        if(isTooLong(value)) {
-            currentValueDisplay.textContent = `${value.toFixed(3)}`;
-        } else {
-            currentValueDisplay.textContent = `${value}`;
-        }
-    }
+    value = convertProperly(value);
+    currentValueDisplay.textContent = value;
 }
 
 function updateSmallDisplay(value, operation) {
-    if(value === "") {
-        lastValueDisplay.textContent = "-";
-        return;
-    }
-    value = Number(value);
-
-    // Formatting the display based on it's value
-    if(isInt(value)) {
-        if(isTooLong(value)) {
-            lastValueDisplay.textContent = `${value.toExponential(3)} ${operation}`;
-        } else {
-            lastValueDisplay.textContent = `${value} ${operation}`;
-        }
-    } else {
-        if(isTooLong(value)) {
-            lastValueDisplay.textContent = `${value.toFixed(3)} ${operation}`;
-        } else {
-            lastValueDisplay.textContent = `${value} ${operation}`;
-        }
-    }
+    value = convertProperly(value);
+    lastValueDisplay.textContent = `${value} ${operation}`;
 }
 
 function isInt(value) {
-    return Number.isInteger(value) ? true : false;
+    return Number.isInteger(Number(value)) ? true : false;
 }
 
 function isTooLong(value) {
-    return value.toString().length >= 8 ? true : false;
+    return value.toString().length >= 10 ? true : false;
 }
 
 // Function used when neither of values are empty and user clicks "=" button.
 function convertProperly(value) {
+    if(value === "") {
+        return "-";
+    } else if (value === "0") {
+        return "0";
+    } else if (Number(value) === 0) {
+        return isTooLong(value) ? 0 : value;
+    } else if (value === " ") {
+        return "";
+    }
+
+    if(String(value).charAt(0) === ".") {
+        return "0" + value;
+    }
 
     if(isInt(value)) {
-        return isTooLong(value) ? value.toExponential(3) : value;
+        value = Number(value);
+        if(isTooLong(value)) {
+            value = value.toExponential(4);
+        }
     } else {
-        return isTooLong(value) ? value.toFixed(3) : value;
+        if(isTooLong(value)) {
+            value = Number(value).toFixed(4);
+            if(isTooLong(value)) {
+                value = Number(value).toExponential(4);
+            }
+        }
+        if((String(value)).charAt(0) === "0" && parseInt(value) != 0) {
+            value = String(value).slice(1, String(value).length);
+        }
     }
+    return value;
 }
-
 
 // --- Variables ---
 
 let currentOperation = null;
-let firstStringValue = "0";
+let firstStringValue = "";
 let secondStringValue = "";
 let firstValue = null;
 let secondValue = null;
@@ -148,19 +124,22 @@ for(let number of numberButtons) {
     number.addEventListener("click", () => {
 
         // Make sure, zero would not overlap
-        if(Number(number.value) === 0 && (firstStringValue == "0" || isTooLong(firstStringValue))){
+        if(Number(number.value) === 0 && (firstStringValue === "0" || secondStringValue === "0")){
             return;
         // Writing value to second string if first one is not empty and operation is choosed
-        } else if(firstStringValue != "0" && currentOperation != null) {
-            secondStringValue += number.value;  
-
-        } else { 
-            firstStringValue += number.value;
+        } else if(firstStringValue != "" && currentOperation != null) {
+            if(!isTooLong(secondStringValue)) {
+                secondStringValue += number.value;
+            }
+        } else {
+            if(!isTooLong(firstStringValue)) {
+                firstStringValue += number.value;
+            }
         }
+
         // If is not present, update main screen with first Value
-        if(secondStringValue == "") {
-            updateMainDisplay(firstStringValue);
-        
+        if(secondStringValue == "") { 
+            updateMainDisplay(firstStringValue);     
         // If second parameter is present, update main screen with second Value
         } else if(secondStringValue != "") {
             updateMainDisplay(secondStringValue);
@@ -174,23 +153,23 @@ for(let operation of operationButtons) {
 
         /* If second value is not present, you can change every operation sign
            excluding equal sign to avoid null display error. */
-        if(secondStringValue == "" && operation.value !== "=") {
+        if(secondStringValue === "" && operation.value !== "=") {
             
             firstValue = Number(firstStringValue);
             currentOperation = operation.value;
             updateSmallDisplay(firstValue, currentOperation);
-            updateMainDisplay("");
+            updateMainDisplay(" ");
 
         /* Else if the second value is present and user clicks operation button 
            again, two previous values get calculated, the operation sign gets signed
            to the result of previous operation */
-        } else if (secondStringValue != "") {
+        } else if (secondStringValue !== "") {
             
             firstValue = Number(firstStringValue);
             secondValue = Number(secondStringValue);
 
             let operationResult = operate(firstValue, currentOperation, secondValue);
-            updateMainDisplay("");
+            updateMainDisplay(" ");
 
             /* If the operation value is equal to "=", it doesn't get signed to result,
                so it won't be defaultly used in the next operation */
@@ -219,7 +198,7 @@ clearButton.addEventListener("click", () => {
     updateMainDisplay("0");
     updateSmallDisplay("", "");
     currentOperation = null;
-    firstStringValue = "0";
+    firstStringValue = "";
     secondStringValue = "";
     firstValue = null;
     secondValue = null;
