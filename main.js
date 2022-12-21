@@ -64,7 +64,6 @@ function isTooLong(value) {
 
 // Function formatting the values based on input.
 function convertProperly(value) {
-    console.log(value);
     if(value === "") {
         return "-";
     } else if (value === "0") {
@@ -80,6 +79,9 @@ function convertProperly(value) {
     } 
 
     if(isInt(value)) {
+        if(String(value).includes(".")) {
+            return String(value);
+        }
         value = Number(value);
         if(isTooLong(value)) {
             value = value.toExponential(4);
@@ -96,6 +98,119 @@ function convertProperly(value) {
         }
     }
     return value;
+}
+
+function numberFunction(number) {
+
+    // Make sure, zero would not overlap
+    if(Number(number.currentTarget.value) === 0 && (firstStringValue === "0" || secondStringValue === "0")){
+        return;
+    // Writing value to second string if first one is not empty and operation is choosed
+    } else if(firstStringValue != "" && currentOperation != null) {
+        if(!isTooLong(secondStringValue)) {
+            secondStringValue += number.currentTarget.value;
+        }
+    } else {
+        if(!isTooLong(firstStringValue)) {
+            firstStringValue += number.currentTarget.value;
+        }
+    }
+
+    // If is not present, update main screen with first Value
+    if(secondStringValue == "") { 
+        updateMainDisplay(firstStringValue);     
+    // If second parameter is present, update main screen with second Value
+    } else if(secondStringValue != "") {
+        updateMainDisplay(secondStringValue);
+    }
+    ableToDelete = true;
+}
+
+function operationFunction(operation) { 
+
+    /* If second value is not present, you can change every operation sign
+       excluding equal sign. */
+    if(secondStringValue === "" && operation.currentTarget.value !== "=") {
+        
+        firstStringValue === "." ? firstValue = 0 : firstValue = Number(firstStringValue);
+        currentOperation = operation.currentTarget.value;
+        updateSmallDisplay(firstValue, currentOperation);
+        updateMainDisplay("0");
+        ableToDelete = false;
+
+    /* Else if the second value is present and user clicks operation button 
+       again, two previous values get calculated, the operation sign gets signed
+       to the result of previous operation */
+    } else if (secondStringValue !== "") {
+        
+        firstStringValue === "." ? firstValue = 0 : firstValue = Number(firstStringValue);
+        secondStringValue === "." ? secondValue = 0 : secondValue = Number(secondStringValue);
+
+        let operationResult = operate(firstValue, currentOperation, secondValue);
+        updateMainDisplay(" ");
+
+        /* If the operation value is equal to "=", it doesn't get signed to result,
+           so it won't be defaultly used in the next operation */
+        if(operation.currentTarget.value === '=') {
+
+            lastValueDisplay.textContent = `${convertProperly(firstValue)} ${currentOperation} ${convertProperly(secondValue)} =`;
+            updateMainDisplay(operationResult);
+            currentOperation = null;
+
+        } else {
+            currentOperation = operation.currentTarget.value;
+            updateSmallDisplay(operationResult, currentOperation);
+            ableToDelete = false;
+        }
+
+        // Resetting the values, setting the result as firstValue
+        firstStringValue = operationResult.toString();
+        secondStringValue = "";
+        firstValue = null;
+        secondValue = null;
+    }
+}
+
+function clearEverything() {
+    updateMainDisplay("0");
+    updateSmallDisplay("", "");
+    currentOperation = null;
+    firstStringValue = "";
+    secondStringValue = "";
+    firstValue = null;
+    secondValue = null;
+}
+
+function commaFunction() {
+    if(currentOperation == null && !firstStringValue.includes(".")) {
+        firstStringValue += ".";
+        currentValueDisplay.textContent += ".";
+    } else if(currentOperation != null && !secondStringValue.includes(".")){
+        secondStringValue += ".";
+        currentValueDisplay.textContent += ".";
+    }
+}
+
+function deleteFunction() {
+    if(ableToDelete) {
+        if(secondStringValue !== "") {
+            secondStringValue = secondStringValue.slice(0, secondStringValue.length - 1);
+            if(secondStringValue === "") {
+                updateMainDisplay("0");
+                ableToDelete = false;
+            } else {
+                updateMainDisplay(secondStringValue);
+            }
+        } else {
+            firstStringValue = firstStringValue.slice(0, firstStringValue.length - 1);
+            if(firstStringValue === "") {
+                updateMainDisplay("0");
+                ableToDelete = false;
+            } else {
+                updateMainDisplay(firstStringValue);
+            }
+        }
+    }
 }
 
 // --- Variables ---
@@ -123,124 +238,43 @@ numberButtons.sort((a, b) => a.value - b.value);
 
 // Adding a click listener for every number button.
 for(let number of numberButtons) {
-    number.addEventListener("click", () => {
-
-        // Make sure, zero would not overlap
-        if(Number(number.value) === 0 && (firstStringValue === "0" || secondStringValue === "0")){
-            return;
-        // Writing value to second string if first one is not empty and operation is choosed
-        } else if(firstStringValue != "" && currentOperation != null) {
-            if(!isTooLong(secondStringValue)) {
-                secondStringValue += number.value;
-            }
-        } else {
-            if(!isTooLong(firstStringValue)) {
-                firstStringValue += number.value;
-            }
-        }
-
-        // If is not present, update main screen with first Value
-        if(secondStringValue == "") { 
-            updateMainDisplay(firstStringValue);     
-        // If second parameter is present, update main screen with second Value
-        } else if(secondStringValue != "") {
-            updateMainDisplay(secondStringValue);
-        }
-        ableToDelete = true;
-    }); 
+    number.addEventListener("click", numberFunction); 
 }
 
 // Add EventListener to every operation button
 for(let operation of operationButtons) {
-    operation.addEventListener("click", () => {
-
-        /* If second value is not present, you can change every operation sign
-           excluding equal sign. */
-        if(secondStringValue === "" && operation.value !== "=") {
-            
-            firstStringValue === "." ? firstValue = 0 : firstValue = Number(firstStringValue);
-            currentOperation = operation.value;
-            updateSmallDisplay(firstValue, currentOperation);
-            updateMainDisplay("0");
-            ableToDelete = false;
-
-        /* Else if the second value is present and user clicks operation button 
-           again, two previous values get calculated, the operation sign gets signed
-           to the result of previous operation */
-        } else if (secondStringValue !== "") {
-            
-            firstStringValue === "." ? firstValue = 0 : firstValue = Number(firstStringValue);
-            secondStringValue === "." ? secondValue = 0 : secondValue = Number(secondStringValue);
-
-            let operationResult = operate(firstValue, currentOperation, secondValue);
-            updateMainDisplay(" ");
-
-            /* If the operation value is equal to "=", it doesn't get signed to result,
-               so it won't be defaultly used in the next operation */
-            if(operation.value === '=') {
-
-                lastValueDisplay.textContent = `${convertProperly(firstValue)} ${currentOperation} ${convertProperly(secondValue)} =`;
-                updateMainDisplay(operationResult);
-                currentOperation = null;
-
-            } else {
-                currentOperation = operation.value;
-                updateSmallDisplay(operationResult, currentOperation);
-                ableToDelete = false;
-            }
-
-            // Resetting the values, setting the result as firstValue
-            firstStringValue = operationResult.toString();
-            secondStringValue = "";
-            firstValue = null;
-            secondValue = null;
-        }
-    })
+    operation.addEventListener("click", operationFunction);
 }
 
 // Clear button event listener to reset everything
-clearButton.addEventListener("click", () => {
-    updateMainDisplay("0");
-    updateSmallDisplay("", "");
-    currentOperation = null;
-    firstStringValue = "";
-    secondStringValue = "";
-    firstValue = null;
-    secondValue = null;
-})
+clearButton.addEventListener("click", clearEverything);
 
-commaButton.addEventListener("click", () => {
-    if(currentOperation == null && !firstStringValue.includes(".")) {
-        firstStringValue += ".";
-        currentValueDisplay.textContent += ".";
-    } else if(currentOperation != null && !secondStringValue.includes(".")){
-        secondStringValue += ".";
-        currentValueDisplay.textContent += ".";
-    }
-})
+commaButton.addEventListener("click", commaFunction);
 
-deleteButton.addEventListener("click", () => {
-    
-    if(ableToDelete) {
-        if(secondStringValue !== "") {
-            secondStringValue = secondStringValue.slice(0, secondStringValue.length - 1);
-            if(secondStringValue === "") {
-                updateMainDisplay("0");
-                ableToDelete = false;
-            } else {
-                updateMainDisplay(secondStringValue);
-            }
-        } else {
-            firstStringValue = firstStringValue.slice(0, firstStringValue.length - 1);
-            if(firstStringValue === "") {
-                updateMainDisplay("0");
-                ableToDelete = false;
-            } else {
-                updateMainDisplay(firstStringValue);
-            }
-        }
+deleteButton.addEventListener("click", deleteFunction);
+
+document.addEventListener("keydown", (event) => {
+
+    let operators = {
+        '+': 'addition',
+        '-': 'substraction',
+        '*': 'multiplication',
+        '/': 'division',
+        '.': 'comma',
     }
-    
+
+    if(!isNaN(event.key) && event.key !== " ") {
+        document.getElementById(`Digit${event.key}`).click();
+    } else if(Object.keys(operators).includes(event.key)) {
+        document.getElementById(`${operators[event.key]}`).click();
+    } else if(event.key === "=" || event.key === "Enter") {
+        document.getElementById("equal-sign").click();
+    } else if(event.key === "Backspace") {
+        document.getElementById("delete-btn").click();
+    } else if(event.key === "Escape") {
+        document.getElementById("clear-btn").click();
+    }
+
 })
 
 // Sprobowac poprawic kod
