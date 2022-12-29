@@ -191,24 +191,23 @@ function commaFunction() {
     }
 }
 
+function deleteDigit(stringValue) {
+    if(stringValue === "") {
+        updateMainDisplay("0");
+        ableToDelete = false;
+    } else {
+        updateMainDisplay(stringValue);
+    }
+}
+
 function deleteFunction() {
     if(ableToDelete) {
         if(secondStringValue !== "") {
             secondStringValue = secondStringValue.slice(0, secondStringValue.length - 1);
-            if(secondStringValue === "") {
-                updateMainDisplay("0");
-                ableToDelete = false;
-            } else {
-                updateMainDisplay(secondStringValue);
-            }
+            deleteDigit(secondStringValue);
         } else {
             firstStringValue = firstStringValue.slice(0, firstStringValue.length - 1);
-            if(firstStringValue === "") {
-                updateMainDisplay("0");
-                ableToDelete = false;
-            } else {
-                updateMainDisplay(firstStringValue);
-            }
+            deleteDigit(firstStringValue);
         }
     }
 }
